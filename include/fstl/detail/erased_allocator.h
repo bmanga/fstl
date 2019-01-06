@@ -18,7 +18,7 @@ struct default_allocator {
 
   T *allocate(size_t n) { return (T*) calloc(n, sizeof (T)); }
 
-  void deallocate(T *p, size_t n) { free(p); }
+  void deallocate(T *p, size_t n) { (void)n; free(p); }
 };
 
 struct erased_allocator_base {
@@ -35,7 +35,7 @@ struct erased_allocator_base {
   virtual void construct_move(void *p, void *val) = 0;
 
   /* These are for the specialized pair allocators */
-  virtual void construct_pair_copy_default(void *pos, const void *first) {};
+  virtual void construct_pair_copy_default(void *pos, const void *first) { (void)pos; (void)first; };
 
   virtual void destruct(void *p) = 0;
 
