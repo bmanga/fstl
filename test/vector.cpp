@@ -328,6 +328,9 @@ TEST_CASE("vector::reverse_iterator", "[iterators]") {
     sum  = sum * 10 + *it;
   }
   REQUIRE(sum == 321);
+
+  // Conversion
+  const vector<int>::const_reverse_iterator ri = vi.rbegin();
 }
 
 TEST_CASE("no_default_ctor", "[types]") {
