@@ -56,6 +56,7 @@ protected:
   void push_back_move(void *val);
   void assign(size_type count, const void *val);
   void *erase(const void *pos);
+  void *erase(const void *begin, const void *end);
   void *insert_copy(const void *pos, const void *val);
   void *insert_move(const void *pos, void *val);
   void resize_copy(size_type count, const void *val);
@@ -144,7 +145,7 @@ public:
   const T &back() const { return *static_cast<const T *>(vector_base::back()); }
 
   iterator erase(iterator pos) { return static_cast<T *>(vector_base::erase(pos)); }
-
+  iterator erase(iterator begin, iterator end) { return static_cast<T *>(vector_base::erase(begin, end)); }
   iterator begin() { return static_cast<iterator>(vector_base::data()); }
   iterator end()   { return static_cast<iterator>(vector_base::back()) + 1; }
 

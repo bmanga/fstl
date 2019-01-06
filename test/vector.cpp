@@ -140,10 +140,23 @@ TEST_CASE("vector::erase", "[modifiers]") {
   vi.push_back(2);
   vi.push_back(3);
   CHECK(vi.size() == 3);
-  vi.erase(vi.begin());
+  auto it = vi.erase(vi.begin());
   REQUIRE(vi.size() == 2);
+  REQUIRE(*it == 2);
   REQUIRE(vi[0] == 2);
   REQUIRE(vi[1] == 3);
+
+  vi.erase(vi.begin(), vi.end());
+  REQUIRE(vi.size() == 0);
+  vi.push_back(1);
+  vi.push_back(2);
+  vi.push_back(3);
+  vi.push_back(4);
+  it = vi.erase(vi.begin() + 1, vi.begin() +3);
+  REQUIRE(vi.size() == 2);
+  REQUIRE(*it == 4);
+  REQUIRE(vi[0] == 1);
+  REQUIRE(vi[1] == 4);
 }
 
 static int copy = 0, move = 0;

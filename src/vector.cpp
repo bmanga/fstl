@@ -187,6 +187,30 @@ void *fstl::vector_base::erase(const void *posit) {
   --m_size;
   return pos;
 }
+void *fstl::vector_base::erase(const void *begin, const void *end) {
+  auto elem_size = m_alloc->element_size();
+  char *first = static_cast<char *>(const_cast<void *>(begin));
+  char *last = static_cast<char *>(const_cast<void *>(end));
+  char *vec_end = static_cast<char *>(back()) + elem_size;
+  char *it = first;
+
+  while (it != last) {
+    m_alloc->destruct(it);
+    --m_size;
+    it += elem_size;
+  }
+
+  auto *next = it;
+  it = first;
+
+  while (next != vec_end) {
+    m_alloc->construct_move(it, next);
+    it = next;
+    next = next + elem_size;
+  }
+  return it;
+}
+
 
 void *fstl::vector_base::insert_copy(const void *posit, const void *val) {
   auto *pos = const_cast<void *>(posit);
