@@ -58,7 +58,7 @@ protected:
   void *erase(const void *pos);
   void *insert_copy(const void *pos, const void *val);
   void *insert_move(const void *pos, void *val);
-
+  void resize_copy(size_type count, const void *val);
 
 private:
   erased_allocator_base *m_alloc;
@@ -153,6 +153,11 @@ public:
 
   iterator insert(const_iterator pos, const T &value) {
     return static_cast<iterator>(vector_base::insert_copy(pos, &value));
+  }
+
+  using vector_base::resize;
+  void resize(size_type count, const value_type &val) {
+    vector_base::resize_copy(count, &val);
   }
 
   iterator insert(const_iterator pos, T &&value) {

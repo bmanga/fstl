@@ -1,6 +1,8 @@
 #include "fstl/vector.h"
 
 #include <stdexcept>
+#include <fstl/vector.h>
+
 
 static constexpr float GROWTH_FACTOR = 1.4f;
 
@@ -134,6 +136,23 @@ void fstl::vector_base::resize(fstl::vector_base::size_type count)
 
   m_size = count;
 }
+
+void fstl::vector_base::resize_copy(fstl::vector_base::size_type count, const void *val) {
+  auto curr_size = m_size;
+
+  if (count > m_capacity)
+    reserve(count);
+
+  for (auto j = count; j < curr_size; ++j) {
+    m_alloc->destruct(ptr_at_idx(*this, j));
+  }
+  for (auto j = curr_size; j < count; ++j) {
+    m_alloc->construct_copy(ptr_at_idx(*this, j), val);
+  }
+
+  m_size = count;
+}
+
 
 void fstl::vector_base::clear() noexcept {
   for (size_type j = 0; j < m_size; ++j) {
@@ -295,6 +314,7 @@ void fstl::vector_base::swap(fstl::vector_base &other) noexcept {
   m_capacity = other.m_capacity;
   other.m_capacity = tmp_capacity;
 }
+
 
 
 

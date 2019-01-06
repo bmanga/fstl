@@ -241,6 +241,12 @@ TEST_CASE("vector::resize", "[modifiers]") {
   REQUIRE(v.size() == 5);
   REQUIRE(v.capacity() == 10); // Capacity does not shrink
   REQUIRE(move == 0); // No moves done
+
+  // Resize with default value
+  vector<int> vi;
+  vi.resize(2, 10);
+  REQUIRE(vi[0] == 10);
+  REQUIRE(vi[1] == 10);
 }
 
 TEST_CASE("vector::swap", "[modifiers]") {
