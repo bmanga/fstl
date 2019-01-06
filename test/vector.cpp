@@ -408,3 +408,18 @@ TEST_CASE("vector::comparison", "[compare]") {
   REQUIRE(vi1 != vi3);
   REQUIRE(!(vi1 != vi2));
 }
+
+TEST_CASE("vector::assign", "[modifiers]") {
+  vector<int> vi;
+  vi.assign(2, 3);
+  REQUIRE(vi.size() == 2);
+  REQUIRE(vi[0] == 3);
+  REQUIRE(vi[1] == 3);
+
+  vector<int> vi2 {0, 1, 2};
+  vi.assign(vi2.begin(), vi2.end());
+  REQUIRE(vi.size() == 3);
+  REQUIRE(vi[0] == 0);
+  REQUIRE(vi[1] == 1);
+  REQUIRE(vi[2] == 2);
+}

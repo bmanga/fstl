@@ -182,6 +182,11 @@ public:
   }
 
   void assign(size_type count, const T &value) { vector_base::assign(count, &value); }
+  template <class ForwardIt, class = decltype(*ForwardIt{})>
+  void assign(ForwardIt first, ForwardIt last)  {
+    clear();
+    insert(begin(), first, last);
+  }
 
   T *data() noexcept { return static_cast<T *>(vector_base::data()); }
   const T *data() const noexcept { return static_cast<const T *>(vector_base::data()); }

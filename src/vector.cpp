@@ -44,9 +44,9 @@ fstl::vector_base::vector_base(fstl::vector_base &&other) noexcept {
   m_data = other.m_data;
   m_capacity = other.m_capacity;
   m_size = other.m_size;
-  // We can't do any better than copying the allocator unfortunately.
-  m_alloc = other.m_alloc->clone();
+  m_alloc = other.m_alloc;
 
+  other.m_alloc = nullptr;
   other.m_data = nullptr;
   other.m_capacity = 0;
   other.m_size = 0;
@@ -348,7 +348,7 @@ void fstl::vector_base::assign(fstl::vector_base::size_type count, const void *v
       m_alloc->construct_copy(old_p, val);
     }
   } else {
-    *this = vector_base{count, val, m_alloc};
+    *this = vector_base{count, val, m_alloc->clone()};
   }
 }
 
