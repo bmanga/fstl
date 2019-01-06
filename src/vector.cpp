@@ -243,7 +243,7 @@ void *fstl::vector_base::insert_copy(const void *posit, const void *val) {
   } else {
     char *last = static_cast<char *>(back());
     char *prev = last - elem_size;
-    while (prev != pos_it) {
+    while (prev != (pos_it - elem_size)) {
       m_alloc->construct_move(last, prev);
       m_alloc->destruct(prev);
       last = prev;
@@ -285,13 +285,55 @@ void *fstl::vector_base::insert_move(const void *posit, void *val) {
   } else {
     char *last = static_cast<char *>(back());
     char *prev = last - elem_size;
-    while (prev != pos_it) {
+    while (prev != (pos_it - elem_size)) {
       m_alloc->construct_move(last, prev);
       m_alloc->destruct(prev);
       last = prev;
       prev -= elem_size;
     }
     m_alloc->construct_move(pos_it, val);
+    return pos_it;
+  }
+}
+
+void *fstl::vector_base::insert_construct(const void *posit, void* dataptr, void (*constructor)(void *, void *)) {
+  auto *pos = const_cast<void *>(posit);
+  auto *pos_it = static_cast<char *>(pos);
+  auto *curr_begin = static_cast<char *>(data());
+  auto elem_size = m_alloc->element_size();
+
+  size_type pos_idx = (pos_it - curr_begin) / elem_size;
+
+  auto *curr_data = m_data;
+  size_t j = 0;
+  ++m_size;
+  if (m_size > m_capacity) {
+    m_data = m_alloc->allocate(m_capacity * GROWTH_FACTOR + 3);
+    for (; j < pos_idx; ++j) {
+      void *old_p = reinterpret_cast<char *>(curr_data) + j * elem_size;
+      void *new_p = reinterpret_cast<char *>(m_data) + j * elem_size;
+      m_alloc->construct_move(new_p, old_p);
+      m_alloc->destruct(old_p);
+    }
+    auto *insert_slot = reinterpret_cast<char *>(m_data) + j * elem_size;
+    constructor(insert_slot, dataptr);
+    while (++j < m_size) {
+      void *old_p = reinterpret_cast<char *>(curr_data) + (j - 1) * elem_size;
+      void *new_p = reinterpret_cast<char *>(m_data) + j * elem_size;
+      m_alloc->construct_move(new_p, old_p);
+      m_alloc->destruct(old_p);
+    }
+    return insert_slot;
+  } else {
+    char *last = static_cast<char *>(back());
+    char *prev = last - elem_size;
+    while (prev != (pos_it - elem_size)) {
+      m_alloc->construct_move(last, prev);
+      m_alloc->destruct(prev);
+      last = prev;
+      prev -= elem_size;
+    }
+    constructor(pos_it, dataptr);
     return pos_it;
   }
 }
@@ -338,7 +380,3 @@ void fstl::vector_base::swap(fstl::vector_base &other) noexcept {
   m_capacity = other.m_capacity;
   other.m_capacity = tmp_capacity;
 }
-
-
-
-

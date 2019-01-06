@@ -107,13 +107,45 @@ TEST_CASE("vector::insert", "[modifiers]") {
   vector<int> vi(100);
   CHECK(vi.size() == 100);
   CHECK(vi.capacity() == 100);
-  vi.insert(vi.begin(), 10);
-  vi.insert(vi.end(), 20);
-  vi.insert(vi.begin() + 50, 30);
+  auto it = vi.insert(vi.begin(), 10);
+  REQUIRE(*it == 10);
+  it = vi.insert(vi.end(), 20);
+  REQUIRE(*it == 20);
+  it = vi.insert(vi.begin() + 50, 30);
+  REQUIRE(*it == 30);
   REQUIRE(vi.size() == 103);
   REQUIRE(vi[0] == 10);
   REQUIRE(vi[50] == 30);
   REQUIRE(vi[102] == 20);
+
+  vi.clear();
+  vi.push_back(0);
+  vi.push_back(2);
+  vi.insert(vi.begin() + 1, 1);
+  REQUIRE(vi.size() == 3);
+  REQUIRE(vi[0] == 0);
+  REQUIRE(vi[1] == 1);
+  REQUIRE(vi[2] == 2);
+
+  // Ranged insert
+  vi.clear();
+  vi.push_back(1);
+  vi.push_back(4);
+
+  vector<int> vi2;
+  vi2.push_back(2);
+  vi2.push_back(3);
+  CHECK(vi2.size() == 2);
+  CHECK(*vi2.begin() == 2);
+  CHECK(*(vi2.begin() + 1) == 3);
+
+  vi.insert(vi.begin() + 1, vi2.begin(), vi2.end());
+  CHECK(vi2.size() == 2);
+  REQUIRE(vi.size() == 4);
+  REQUIRE(vi[0] == 1);
+  REQUIRE(vi[1] == 2);
+  REQUIRE(vi[2] == 3);
+  REQUIRE(vi[3] == 4);
 }
 
 TEST_CASE("vector::emplace", "[modifiers]") {

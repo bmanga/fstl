@@ -59,6 +59,7 @@ protected:
   void *erase(const void *begin, const void *end);
   void *insert_copy(const void *pos, const void *val);
   void *insert_move(const void *pos, void *val);
+  void *insert_construct(const void *pos, void *data, void (fn)(void *, void *));
   void resize_copy(size_type count, const void *val);
 
 private:
@@ -202,6 +203,24 @@ public:
 
   iterator insert(const_iterator pos, T &&value) {
     return static_cast<iterator>(vector_base::insert_move(pos, &value));
+  }
+
+  template <class InputIterator>
+  iterator insert(const_iterator pos, InputIterator first, InputIterator last) {
+    // FIXME: This is as inefficient as you can get.
+    using it_ptr_type = decltype(&*first);
+    auto constructor = [](void *ptr, void *dataptr) {
+      new(ptr) value_type(*static_cast<it_ptr_type>(dataptr));
+    };
+    reserve(size() + last - first);
+    iterator insert_point = const_cast<iterator>(pos);
+    while (first != last) {
+      insert_point = static_cast<iterator>(vector_base::insert_construct(insert_point, &*first, constructor));
+      ++first;
+      // Increment the iterator, otherwise we'll insert backwards.
+      ++insert_point;
+    }
+    return insert_point;
   }
 };
 
