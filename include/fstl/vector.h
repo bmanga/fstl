@@ -89,7 +89,7 @@ public:
   public:
     reverse_iterator(pointer p) : m_p(p) {}
 
-    reverse_iterator &operator ++() { --m_p; }
+    reverse_iterator &operator ++() { --m_p; return *this; }
     value_type &operator *() { return *m_p; }
     pointer operator ->() { return m_p; }
 
@@ -97,6 +97,21 @@ public:
     bool operator !=(const reverse_iterator &other) const { return m_p != other.m_p; }
   private:
     iterator m_p;
+  };
+
+  class const_reverse_iterator
+  {
+  public:
+    const_reverse_iterator(const_pointer p) : m_p(p) {}
+
+    const_reverse_iterator &operator ++() { --m_p; return *this; }
+    const value_type &operator *() const { return *m_p; }
+    const_pointer operator ->() const { return m_p; }
+
+    bool operator ==(const const_reverse_iterator &other) const { return m_p == other.m_p; }
+    bool operator !=(const const_reverse_iterator &other) const { return m_p != other.m_p; }
+  private:
+    const_iterator m_p;
   };
 
   vector() : vector_base(new detail::erased_allocator<allocator_type> (Allocator())) {}
@@ -169,6 +184,9 @@ public:
 
   reverse_iterator rbegin() {return {static_cast<pointer>(vector_base::back())}; }
   reverse_iterator rend() { return begin() - 1; }
+
+  const_reverse_iterator rbegin() const { return {static_cast<const_pointer>(vector_base::back())};}
+  const_reverse_iterator rend() const { return begin() - 1; }
 
   iterator insert(const_iterator pos, const T &value) {
     return static_cast<iterator>(vector_base::insert_copy(pos, &value));

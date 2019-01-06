@@ -322,4 +322,10 @@ TEST_CASE("vector::reverse_iterator", "[iterators]") {
   }
 
   REQUIRE(sum == 321);
+  sum = 0;
+  const vector<int>& cvi = vi;
+  for (auto it = cvi.rbegin(); it != cvi.rend(); ++it) {
+    sum  = sum * 10 + *it;
+  }
+  REQUIRE(sum == 321);
 }
