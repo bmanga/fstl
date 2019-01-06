@@ -215,7 +215,7 @@ public:
     reserve(size() + last - first);
     iterator insert_point = const_cast<iterator>(pos);
     while (first != last) {
-      insert_point = static_cast<iterator>(vector_base::insert_construct(insert_point, &*first, constructor));
+      insert_point = static_cast<iterator>(vector_base::insert_construct(insert_point, (void *)(&*first), constructor));
       ++first;
       // Increment the iterator, otherwise we'll insert backwards.
       ++insert_point;
