@@ -3,6 +3,7 @@
 #ifndef FSTL_ERASED_ALLOCATOR_H
 #define FSTL_ERASED_ALLOCATOR_H
 
+#include "fstl/type_traits.h"
 #include <new>
 
 extern "C" void* calloc( size_t num, size_t size ) noexcept;
@@ -58,7 +59,10 @@ struct erased_allocator : public erased_allocator_base {
 
   virtual void deallocate(void *p, size_t n) override { allocator.deallocate(static_cast<value_type *>(p), n); }
 
-  virtual void construct(void *p) override { ::new(p) value_type{}; }
+  virtual void construct(void *p) override {
+    if constexpr(fstl::is_default_constructible<value_type>::value)
+      ::new(p) value_type{};
+  }
 
   virtual void destruct(void *p) override { static_cast<value_type *>(p)->~value_type(); }
 

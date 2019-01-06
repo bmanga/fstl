@@ -329,3 +329,13 @@ TEST_CASE("vector::reverse_iterator", "[iterators]") {
   }
   REQUIRE(sum == 321);
 }
+
+TEST_CASE("no_default_ctor", "[types]") {
+  struct dummy
+  {
+    dummy() = delete;
+    dummy(int) {};
+  };
+
+  vector<dummy> vd;
+}
