@@ -1,7 +1,7 @@
 #include <catch2/catch.hpp>
 #include <stdexcept>
 
-#define TEST_STD_VEC 1
+#define TEST_STD_VEC 0
 #if TEST_STD_VEC
 #include <vector>
 template <class T>
@@ -271,3 +271,20 @@ TEST_CASE("vector::swap", "[modifiers]") {
   REQUIRE(copy == 0);
 }
 
+TEST_CASE("vector::iterator", "[iterators]") {
+  vector<int> vi;
+  vi.push_back(1);
+  vi.push_back(2);
+
+  int sum = 0;
+  for (const int &i : vi) {
+    sum += i;
+  }
+
+  const vector<int>& cvi = vi;
+  for (const int &i : cvi) {
+    sum += i;
+  }
+
+  REQUIRE(sum == 6);
+}

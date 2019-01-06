@@ -148,8 +148,8 @@ public:
   iterator begin() { return static_cast<iterator>(vector_base::data()); }
   iterator end()   { return static_cast<iterator>(vector_base::back()) + 1; }
 
-  const_iterator cbegin() const { return static_cast<const_iterator>(vector_base::data()); }
-  const_iterator cend() const   { return static_cast<const_iterator>(vector_base::back()) + 1; }
+  const_iterator begin() const { return static_cast<const_iterator>(vector_base::data()); }
+  const_iterator end() const   { return static_cast<const_iterator>(vector_base::back()) + 1; }
 
   iterator insert(const_iterator pos, const T &value) {
     return static_cast<iterator>(vector_base::insert_copy(pos, &value));
