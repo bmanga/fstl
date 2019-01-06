@@ -17,9 +17,9 @@ struct default_allocator {
 
   template< class U > struct rebind { using other = default_allocator<U>; };
 
-  T *allocate(size_t n) { return (T*) calloc(n, sizeof (T)); }
+  T *allocate(size_t n) { return (T*) ::operator new( n * sizeof (T)); }
 
-  void deallocate(T *p, size_t n) { (void)n; free(p); }
+  void deallocate(T *p, size_t n) { ::operator delete(p, n); }
 };
 
 struct erased_allocator_base {
