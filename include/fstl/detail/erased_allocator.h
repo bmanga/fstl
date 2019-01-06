@@ -67,7 +67,8 @@ struct erased_allocator : public erased_allocator_base {
   virtual void destruct(void *p) override { static_cast<value_type *>(p)->~value_type(); }
 
   virtual void construct_copy(void *p, const void *val) override {
-    ::new(p) value_type{*static_cast<const value_type *>(val)};
+    if constexpr(fstl::is_copy_constructible<value_type>::value)
+      ::new(p) value_type{*static_cast<const value_type *>(val)};
   }
 
   virtual void construct_move(void *p, void *val) override {

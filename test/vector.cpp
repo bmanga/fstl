@@ -398,6 +398,17 @@ TEST_CASE("no_default_ctor", "[types]") {
   vector<dummy> vd;
 }
 
+TEST_CASE("no_copy_ctor", "[types]") {
+  struct dummy
+  {
+    dummy(const dummy &) = delete;
+    dummy() = default;
+    dummy(dummy &&) = default;
+  };
+
+  vector<dummy> vd;
+}
+
 TEST_CASE("vector::comparison", "[compare]") {
   vector<int> vi1 {1, 2, 3};
   vector<int> vi2 {1, 2, 3};
