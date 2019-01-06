@@ -92,6 +92,7 @@ public:
   {
   public:
     friend const_reverse_iterator;
+    reverse_iterator() : m_p(nullptr) {}
     reverse_iterator(pointer p) : m_p(p) {}
 
     reverse_iterator &operator ++() { --m_p; return *this; }
@@ -107,6 +108,7 @@ public:
   class const_reverse_iterator
   {
   public:
+    const_reverse_iterator() : m_p(nullptr) {}
     const_reverse_iterator(const_pointer p) : m_p(p) {}
     const_reverse_iterator(const reverse_iterator &other) : m_p(other.m_p) {}
 
