@@ -88,12 +88,10 @@ public:
   {
   public:
     reverse_iterator(pointer p) : m_p(p) {}
-    reverse_iterator &operator ++() {
-      --m_p;
-    }
-    value_type &operator *() {
-      return *m_p;
-    }
+
+    reverse_iterator &operator ++() { --m_p; }
+    value_type &operator *() { return *m_p; }
+    pointer operator ->() { return m_p; }
 
     bool operator ==(const reverse_iterator &other) const { return m_p == other.m_p; }
     bool operator !=(const reverse_iterator &other) const { return m_p != other.m_p; }
