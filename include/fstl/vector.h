@@ -69,6 +69,7 @@ private:
 };
 
 
+
 template <typename T, typename Allocator = detail::default_allocator<T>>
 class vector : public vector_base
 {
@@ -83,6 +84,22 @@ public:
   using iterator = pointer;
   using const_iterator = const_pointer;
 
+  class reverse_iterator
+  {
+  public:
+    reverse_iterator(pointer p) : m_p(p) {}
+    reverse_iterator &operator ++() {
+      --m_p;
+    }
+    value_type &operator *() {
+      return *m_p;
+    }
+
+    bool operator ==(const reverse_iterator &other) const { return m_p == other.m_p; }
+    bool operator !=(const reverse_iterator &other) const { return m_p != other.m_p; }
+  private:
+    iterator m_p;
+  };
 
   vector() : vector_base(new detail::erased_allocator<allocator_type> (Allocator())) {}
 
@@ -146,11 +163,14 @@ public:
 
   iterator erase(iterator pos) { return static_cast<T *>(vector_base::erase(pos)); }
   iterator erase(iterator begin, iterator end) { return static_cast<T *>(vector_base::erase(begin, end)); }
+
   iterator begin() { return static_cast<iterator>(vector_base::data()); }
   iterator end()   { return static_cast<iterator>(vector_base::back()) + 1; }
-
   const_iterator begin() const { return static_cast<const_iterator>(vector_base::data()); }
   const_iterator end() const   { return static_cast<const_iterator>(vector_base::back()) + 1; }
+
+  reverse_iterator rbegin() {return {static_cast<pointer>(vector_base::back())}; }
+  reverse_iterator rend() { return begin() - 1; }
 
   iterator insert(const_iterator pos, const T &value) {
     return static_cast<iterator>(vector_base::insert_copy(pos, &value));

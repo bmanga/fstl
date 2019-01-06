@@ -307,3 +307,19 @@ TEST_CASE("vector::iterator", "[iterators]") {
 
   REQUIRE(sum == 6);
 }
+
+TEST_CASE("vector::reverse_iterator", "[iterators]") {
+  vector<int> vi;
+  vi.push_back(1);
+  vi.push_back(2);
+  vi.push_back(3);
+
+  int sum = 0;
+  int multiply = 1;
+
+  for (auto it = vi.rbegin(); it != vi.rend(); ++it) {
+    sum  = sum * 10 + *it;
+  }
+
+  REQUIRE(sum == 321);
+}
