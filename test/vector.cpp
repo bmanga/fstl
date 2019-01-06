@@ -397,3 +397,14 @@ TEST_CASE("no_default_ctor", "[types]") {
 
   vector<dummy> vd;
 }
+
+TEST_CASE("vector::comparison", "[compare]") {
+  vector<int> vi1 {1, 2, 3};
+  vector<int> vi2 {1, 2, 3};
+  vector<int> vi3 {3, 6};
+
+  REQUIRE(vi1 == vi2);
+  REQUIRE(!(vi2 == vi3));
+  REQUIRE(vi1 != vi3);
+  REQUIRE(!(vi1 != vi2));
+}

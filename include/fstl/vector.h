@@ -242,6 +242,29 @@ public:
   }
 };
 
+template< class T, class Alloc >
+bool operator==( const fstl::vector<T,Alloc>& lhs,
+                 const fstl::vector<T,Alloc>& rhs ) {
+  if (lhs.size() != rhs.size()) return false;
+  auto size = lhs.size();
+  for (size_t j = 0; j < size; ++j) {
+    if (lhs[j] != rhs[j]) return false;
+  }
+  return true;
+}
+
+template< class T, class Alloc >
+bool operator!=( const fstl::vector<T,Alloc>& lhs,
+                 const fstl::vector<T,Alloc>& rhs )
+{
+  if (lhs.size() != rhs.size()) return true;
+  auto size = lhs.size();
+  for (size_t j = 0; j < size; ++j) {
+    if (lhs[j] == rhs[j]) return false;
+  }
+  return true;
+}
+
 #endif //FSTL_USE_STD_LIB
 }
 
