@@ -128,6 +128,14 @@ public:
   vector(size_type count, const T &val, const Allocator &alloc = Allocator())
     : vector_base(count, &val, new detail::erased_allocator<allocator_type>(alloc)) {}
 
+
+  template <class InputIterator, class = decltype(*InputIterator{})>
+  vector (InputIterator first, InputIterator last, const Allocator &alloc = Allocator())
+    : vector_base(new detail::erased_allocator<allocator_type> (Allocator()))
+  {
+    reserve(4);
+    insert(begin(), first, last);
+  }
   reference operator[](size_type pos)
   {
     return *static_cast<pointer>(vector_base::at(pos));
@@ -212,7 +220,7 @@ public:
     auto constructor = [](void *ptr, void *dataptr) {
       new(ptr) value_type(*static_cast<it_ptr_type>(dataptr));
     };
-    reserve(size() + last - first);
+
     iterator insert_point = const_cast<iterator>(pos);
     while (first != last) {
       insert_point = static_cast<iterator>(vector_base::insert_construct(insert_point, (void *)(&*first), constructor));

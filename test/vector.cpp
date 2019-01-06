@@ -1,5 +1,6 @@
 #include <catch2/catch.hpp>
 #include <stdexcept>
+#include <set>
 
 #define TEST_STD_VEC 0
 #if TEST_STD_VEC
@@ -55,6 +56,20 @@ TEST_CASE("vector::move", "[ctor]") {
   REQUIRE(moved.size() == 100);
   REQUIRE(moved[0] == 10);
   REQUIRE(moved[99] == 10);
+}
+
+TEST_CASE("vector::vector(It, It)", "[ctor]") {
+  vector<int> vi1;
+  vi1.push_back(0);
+  vi1.push_back(1);
+
+  vector<int> vi(vi1.begin(), vi1.end());
+  REQUIRE(vi.size() == 2);
+  REQUIRE(vi[0] == 0);
+  REQUIRE(vi[1] == 1);
+
+  std::set<int> si{2, 3};
+  vector<int>vi2(si.begin(), si.end());
 }
 
 TEST_CASE("vector::at", "[elem_access]") {
