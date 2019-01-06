@@ -12,6 +12,8 @@ namespace fstl {
 
 #include "detail/erased_allocator.h"
 
+#include <initializer_list>
+
 namespace fstl
 {
 using detail::erased_allocator_base;
@@ -136,6 +138,10 @@ public:
     reserve(4);
     insert(begin(), first, last);
   }
+
+  vector(std::initializer_list<T> il, const Allocator &alloc = Allocator())
+    : vector(il.begin(), il.end(), alloc) {}
+
   reference operator[](size_type pos)
   {
     return *static_cast<pointer>(vector_base::at(pos));

@@ -35,6 +35,14 @@ TEST_CASE("vector::inited_size", "[ctor]") {
   REQUIRE(vi[99] == 10);
 }
 
+TEST_CASE("vector::vector(initializer_list)", "[ctor]") {
+  vector<int> vi{0, 1, 2};
+  REQUIRE(vi.size() == 3);
+  REQUIRE(vi[0] == 0);
+  REQUIRE(vi[1] == 1);
+  REQUIRE(vi[2] == 2);
+}
+
 TEST_CASE("vector::copy", "[ctor]") {
   vector<int> orig(100, 10);
   vector<int> copy = orig;
