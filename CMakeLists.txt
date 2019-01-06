@@ -10,4 +10,6 @@ add_library(fstl
   src/unordered_map.cpp)
 target_include_directories(fstl PUBLIC include)
 
-add_subdirectory(test)
+if(FSTL_BUILD_TESTS)
+  add_subdirectory(test)
+endif()
