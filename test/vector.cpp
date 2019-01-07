@@ -1,6 +1,8 @@
 #include <catch2/catch.hpp>
 #include <stdexcept>
 #include <set>
+#include <iterator>
+#include <type_traits>
 
 #define TEST_STD_VEC 0
 #if TEST_STD_VEC
@@ -433,4 +435,16 @@ TEST_CASE("vector::assign", "[modifiers]") {
   REQUIRE(vi[0] == 0);
   REQUIRE(vi[1] == 1);
   REQUIRE(vi[2] == 2);
+}
+
+TEST_CASE("vector::traits", "[traits]") {
+  REQUIRE(std::is_same_v<std::iterator_traits<vector<int>::reverse_iterator>::difference_type, long>);
+  REQUIRE(std::is_same_v<std::iterator_traits<vector<int>::reverse_iterator>::value_type, int>);
+  REQUIRE(std::is_same_v<std::iterator_traits<vector<int>::reverse_iterator>::pointer, int *>);
+  REQUIRE(std::is_same_v<std::iterator_traits<vector<int>::reverse_iterator>::reference, int &>);
+
+  REQUIRE(std::is_same_v<std::iterator_traits<vector<int>::const_reverse_iterator>::difference_type, long>);
+  REQUIRE(std::is_same_v<std::iterator_traits<vector<int>::const_reverse_iterator>::value_type, int>);
+  REQUIRE(std::is_same_v<std::iterator_traits<vector<int>::const_reverse_iterator>::pointer, const int *>);
+  REQUIRE(std::is_same_v<std::iterator_traits<vector<int>::const_reverse_iterator>::reference, const int &>);
 }

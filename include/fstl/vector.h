@@ -14,6 +14,10 @@ namespace fstl {
 
 #include <initializer_list>
 
+namespace std {
+struct forward_iterator_tag;
+}
+
 namespace fstl
 {
 using detail::erased_allocator_base;
@@ -87,10 +91,20 @@ public:
   using iterator = pointer;
   using const_iterator = const_pointer;
 
+  struct reverse_iter_traits
+  {
+    using iterator_category = std::forward_iterator_tag;
+    using value_type = T;
+    using difference_type  = long;
+  };
+
   class const_reverse_iterator;
-  class reverse_iterator
+  class reverse_iterator : public reverse_iter_traits
   {
   public:
+    using pointer = T *;
+    using reference = T &;
+
     friend const_reverse_iterator;
     reverse_iterator() : m_p(nullptr) {}
     reverse_iterator(pointer p) : m_p(p) {}
@@ -105,9 +119,12 @@ public:
     iterator m_p;
   };
 
-  class const_reverse_iterator
+  class const_reverse_iterator : public reverse_iter_traits
   {
   public:
+    using pointer = const T *;
+    using reference = const T &;
+
     const_reverse_iterator() : m_p(nullptr) {}
     const_reverse_iterator(const_pointer p) : m_p(p) {}
     const_reverse_iterator(const reverse_iterator &other) : m_p(other.m_p) {}
