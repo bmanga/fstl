@@ -110,6 +110,7 @@ public:
     reverse_iterator(pointer p) : m_p(--p) {}
 
     reverse_iterator &operator ++() { --m_p; return *this; }
+    reverse_iterator &operator --() { ++m_p; return *this; }
     value_type &operator *() { return *m_p; }
     pointer operator ->() { return m_p; }
 
@@ -132,6 +133,7 @@ public:
     const_reverse_iterator(const reverse_iterator &other) : m_p(other.m_p) {}
 
     const_reverse_iterator &operator ++() { --m_p; return *this; }
+    const_reverse_iterator &operator --() { ++m_p; return *this; }
     const value_type &operator *() const { return *m_p; }
     const_pointer operator ->() const { return m_p; }
 
