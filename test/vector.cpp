@@ -388,6 +388,11 @@ TEST_CASE("vector::reverse_iterator", "[iterators]") {
 
   // Conversion
   const vector<int>::const_reverse_iterator ri = vi.rbegin();
+
+  // Reverse from iterator
+  vector<int>::reverse_iterator cri(vi.end());
+  REQUIRE(*cri == 3);
+
 }
 
 TEST_CASE("no_default_ctor", "[types]") {

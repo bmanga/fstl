@@ -107,7 +107,7 @@ public:
 
     friend const_reverse_iterator;
     reverse_iterator() : m_p(nullptr) {}
-    reverse_iterator(pointer p) : m_p(p) {}
+    reverse_iterator(pointer p) : m_p(--p) {}
 
     reverse_iterator &operator ++() { --m_p; return *this; }
     value_type &operator *() { return *m_p; }
@@ -128,7 +128,7 @@ public:
     using reference = const T &;
 
     const_reverse_iterator() : m_p(nullptr) {}
-    const_reverse_iterator(const_pointer p) : m_p(p) {}
+    const_reverse_iterator(const_pointer p) : m_p(--p) {}
     const_reverse_iterator(const reverse_iterator &other) : m_p(other.m_p) {}
 
     const_reverse_iterator &operator ++() { --m_p; return *this; }
@@ -230,13 +230,13 @@ public:
   const_iterator cbegin() const { return static_cast<const_iterator>(vector_base::data()); }
   const_iterator cend() const   { return static_cast<const_iterator>(vector_base::back()) + 1; }
 
-  reverse_iterator rbegin() {return {static_cast<pointer>(vector_base::back())}; }
-  reverse_iterator rend() { return begin() - 1; }
+  reverse_iterator rbegin() {return end(); }
+  reverse_iterator rend() { return begin(); }
 
-  const_reverse_iterator rbegin() const { return {static_cast<const_pointer>(vector_base::back())};}
-  const_reverse_iterator rend() const { return begin() - 1; }
-  const_reverse_iterator crbegin() const { return {static_cast<const_pointer>(vector_base::back())};}
-  const_reverse_iterator crend() const { return begin() - 1; }
+  const_reverse_iterator rbegin() const { return end();}
+  const_reverse_iterator rend() const { return begin(); }
+  const_reverse_iterator crbegin() const { return end();}
+  const_reverse_iterator crend() const { return begin(); }
 
   iterator insert(const_iterator pos, const T &value) {
     return static_cast<iterator>(vector_base::insert_copy(pos, &value));
