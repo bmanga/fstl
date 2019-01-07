@@ -224,7 +224,8 @@ void *fstl::vector_base::insert_copy(const void *posit, const void *val) {
   size_t j = 0;
   ++m_size;
   if (m_size > m_capacity) {
-    m_data = m_alloc->allocate(m_capacity * GROWTH_FACTOR + 3);
+    m_capacity = m_capacity * GROWTH_FACTOR + 3;
+    m_data = m_alloc->allocate(m_capacity);
     for (; j < pos_idx; ++j) {
       void *old_p = reinterpret_cast<char *>(curr_data) + j * elem_size;
       void *new_p = reinterpret_cast<char *>(m_data) + j * elem_size;
@@ -266,7 +267,8 @@ void *fstl::vector_base::insert_move(const void *posit, void *val) {
   size_t j = 0;
   ++m_size;
   if (m_size > m_capacity) {
-    m_data = m_alloc->allocate(m_capacity * GROWTH_FACTOR + 3);
+    m_capacity = m_capacity * GROWTH_FACTOR + 3;
+    m_data = m_alloc->allocate(m_capacity);
     for (; j < pos_idx; ++j) {
       void *old_p = reinterpret_cast<char *>(curr_data) + j * elem_size;
       void *new_p = reinterpret_cast<char *>(m_data) + j * elem_size;
@@ -308,7 +310,8 @@ void *fstl::vector_base::insert_construct(const void *posit, void* dataptr, void
   size_t j = 0;
   ++m_size;
   if (m_size > m_capacity) {
-    m_data = m_alloc->allocate(m_capacity * GROWTH_FACTOR + 3);
+    m_capacity = m_capacity * GROWTH_FACTOR + 3;
+    m_data = m_alloc->allocate(m_capacity);
     for (; j < pos_idx; ++j) {
       void *old_p = reinterpret_cast<char *>(curr_data) + j * elem_size;
       void *new_p = reinterpret_cast<char *>(m_data) + j * elem_size;
