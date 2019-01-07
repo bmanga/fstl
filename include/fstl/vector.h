@@ -113,6 +113,8 @@ public:
     value_type &operator *() { return *m_p; }
     pointer operator ->() { return m_p; }
 
+    iterator base() const { return m_p; }
+
     bool operator ==(const reverse_iterator &other) const { return m_p == other.m_p; }
     bool operator !=(const reverse_iterator &other) const { return m_p != other.m_p; }
   private:
@@ -135,6 +137,8 @@ public:
 
     bool operator ==(const const_reverse_iterator &other) const { return m_p == other.m_p; }
     bool operator !=(const const_reverse_iterator &other) const { return m_p != other.m_p; }
+
+    const_iterator base() const { return m_p; }
   private:
     const_iterator m_p;
   };
