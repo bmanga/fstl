@@ -9,7 +9,6 @@ namespace fstl {
   using std::vector;
 }
 #else
-
 #include "detail/erased_allocator.h"
 
 #include <initializer_list>
@@ -114,7 +113,7 @@ public:
     value_type &operator *() { return *m_p; }
     pointer operator ->() { return m_p; }
 
-    iterator base() const { return m_p; }
+    iterator base() const { return m_p + 1; }
 
     bool operator ==(const reverse_iterator &other) const { return m_p == other.m_p; }
     bool operator !=(const reverse_iterator &other) const { return m_p != other.m_p; }
@@ -140,7 +139,7 @@ public:
     bool operator ==(const const_reverse_iterator &other) const { return m_p == other.m_p; }
     bool operator !=(const const_reverse_iterator &other) const { return m_p != other.m_p; }
 
-    const_iterator base() const { return m_p; }
+    const_iterator base() const { return m_p + 1; }
   private:
     const_iterator m_p;
   };
@@ -294,8 +293,7 @@ bool operator!=( const fstl::vector<T,Alloc>& lhs,
   }
   return true;
 }
-
-#endif //FSTL_USE_STD_LIB
 }
+#endif //FSTL_USE_STD_LIB
 
 #endif //FSTL_VECTOR_H
