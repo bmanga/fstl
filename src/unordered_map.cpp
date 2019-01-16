@@ -72,7 +72,7 @@ void *unordered_map_base::operator[](const void *key) {
   return bucket.front();
 }
 
-unordered_map_base::iterator unordered_map_base::begin()
+unordered_map_base::iterator unordered_map_base::begin() const
 {
   for (size_type j = 0; j < m_num_buckets; ++j) {
     auto &bucket = m_table[j];
@@ -118,7 +118,7 @@ void unordered_map_base::clear() {
   m_size = 0;
 }
 
-void *unordered_map_iterator_base::data() {
+void *unordered_map_iterator_base::data() const {
   return *fstl::detail::forward_list_iterator_base(m_bucket_it);
 }
 

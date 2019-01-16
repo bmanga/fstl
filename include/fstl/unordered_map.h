@@ -58,11 +58,11 @@ struct erased_pair_allocator : erased_allocator<typename Alloc::template rebind<
 struct ll_node;
 
 struct unordered_map_iterator_base {
-  struct unordered_map_base *m_umap = nullptr;
+  struct unordered_map_base const *m_umap = nullptr;
   ll_node *m_bucket_it = nullptr;
   size_t m_current_bucket = 0;
 
-  void *data();
+  void *data() const;
   unordered_map_iterator_base &next();
 
   bool operator ==(const unordered_map_iterator_base &other) const { return m_bucket_it == other.m_bucket_it; }
@@ -96,8 +96,8 @@ protected:
   void *operator[](const void *key);
   size_type count(const void *key) const;
   iterator find(const void *key);
-  iterator begin();
-  iterator end() { return {this, nullptr, m_num_buckets}; }
+  iterator begin() const;
+  iterator end() const { return {this, nullptr, m_num_buckets}; }
 
 private:
 
@@ -142,6 +142,24 @@ public:
     }
   };
 
+class const_iterator : public detail::unordered_map_iterator_base {
+  using base = unordered_map_iterator_base;
+public:
+  const_iterator(const base &b) : base(b) {}
+  const value_type &operator*() const {
+    return *static_cast<const value_type *>(base::data());
+  }
+
+  const value_type *operator->() const {
+    return static_cast<const value_type *>(base::data());
+  }
+
+  const_iterator &operator ++() {
+    base::next();
+    return *this;
+  }
+};
+
   explicit unordered_map( size_type bucket_count,
                           const Hash& hash = Hash(),
                           const key_equal& equal = key_equal(),
@@ -153,6 +171,8 @@ public:
       new detail::erased_pair_allocator<Allocator, const Key, Value>(alloc))
   {
   }
+
+  unordered_map() : unordered_map(100) {}
 
   Value &at(const Key &key) {
     return static_cast<value_type *>(base::at(&key))->second;
@@ -170,6 +190,9 @@ public:
 
   iterator begin() { return base::begin(); }
   iterator end() { return base::end(); }
+
+  const_iterator begin() const { return base::begin(); }
+  const_iterator end() const  { return base::end(); }
 
   fstl::pair<iterator, bool> insert(const value_type &val) { return base::insert_copy(&val.first, &val); }
 };
