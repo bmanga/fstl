@@ -32,16 +32,17 @@ unordered_map_base::unordered_map_base(unordered_map_base::size_type num_buckets
   }
 }
 
-fstl::pair<void *, bool> unordered_map_base::insert_copy(const void *key, const void *pair) {
-  auto bucket = m_table[m_hash->hash(key) % m_num_buckets];
+fstl::pair<unordered_map_base::iterator, bool> unordered_map_base::insert_copy(const void *key, const void *pair) {
+  auto bucket_idx = m_hash->hash(key) % m_num_buckets;
+  auto &bucket = m_table[m_hash->hash(key) % m_num_buckets];
   // Check if container contains the key already.
-  auto *found = *bucket.find(key, m_equal);
-  if (found != nullptr) {
-    return {found, false};
+  auto foundit = bucket.find(key, m_equal);
+  if (*foundit != nullptr) {
+    return {{this, foundit.m_node, bucket_idx}, false};
   }
   bucket.push_front_copy(pair);
   ++m_size;
-  return {bucket.front(), true};
+  return {{this, bucket.first_node(), bucket_idx}, true};
 }
 
 void *unordered_map_base::at(const void *key) {

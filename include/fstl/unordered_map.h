@@ -90,7 +90,7 @@ public:
   void clear();
 
 protected:
-  fstl::pair<void *, bool> insert_copy(const void *key, const void *pair);
+  fstl::pair<iterator, bool> insert_copy(const void *key, const void *pair);
 
   void *at(const void *key);
   void *operator[](const void *key);
@@ -194,7 +194,10 @@ public:
   const_iterator begin() const { return base::begin(); }
   const_iterator end() const  { return base::end(); }
 
-  fstl::pair<iterator, bool> insert(const value_type &val) { return base::insert_copy(&val.first, &val); }
+  fstl::pair<iterator, bool> insert(const value_type &val) {
+    auto [it, ok] = base::insert_copy(&val.first, &val);
+    return {iterator{it}, ok};
+  }
 };
 
 } // end namespace fstl
