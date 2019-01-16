@@ -198,6 +198,11 @@ public:
     auto [it, ok] = base::insert_copy(&val.first, &val);
     return {iterator{it}, ok};
   }
+
+  template <class ...Args>
+  fstl::pair<iterator, bool> emplace(Args &... args) {
+    return insert(value_type(std::forward<Args>(args)...));
+  }
 };
 
 } // end namespace fstl
