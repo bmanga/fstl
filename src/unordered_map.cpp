@@ -93,7 +93,7 @@ unordered_map_base::size_type unordered_map_base::count(const void *key) const {
   return 0;
 }
 
-unordered_map_base::iterator unordered_map_base::find(const void *key) {
+unordered_map_base::iterator unordered_map_base::find(const void *key) const {
   auto bucket_idx = m_hash->hash(key) % m_num_buckets;
   auto &bucket = m_table[bucket_idx];
   auto data_it = bucket.find(key, m_equal);

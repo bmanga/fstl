@@ -95,7 +95,7 @@ protected:
   void *at(const void *key);
   void *operator[](const void *key);
   size_type count(const void *key) const;
-  iterator find(const void *key);
+  iterator find(const void *key) const;
   iterator begin() const;
   iterator end() const { return {this, nullptr, m_num_buckets}; }
 
@@ -182,6 +182,7 @@ public:
   }
   size_type count (const Key &key) const { return base::count(&key); }
   iterator find(const Key &key) { return base::find(&key); }
+  const_iterator find(const Key &key) const { return base::find(&key); }
   fstl::pair<iterator, iterator> equal_range(const Key &key)
   {
     iterator it = base::find(&key);
